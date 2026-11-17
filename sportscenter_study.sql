@@ -106,3 +106,88 @@ INSERT INTO members (name, gender, birth_year, join_date)
 VALUES ('임시회원', 'M', 2000, '2026-11-01');
 SELECT member_id, name FROM members;
 
+
+
+-- 수강 신청 테이블 
+CREATE TABLE enrollments
+(
+   member_id    INT             NOT NULL REFERENCES members(member_id),
+   course_id    INT             NOT NULL REFERENCES courses(course_id),
+   enroll_month CHAR(7)         NOT NULL,
+   status       VARCHAR(10)     NOT NULL,
+   pay_amount   NUMERIC(10,2)   NOT NULL CHECK (pay_amount >=0),
+   PRIMARY KEY (member_id, course_id, enroll_month)
+);
+
+INSERT INTO enrollments 
+VALUES (1, 1, '2026-11', '수료', 50000);
+
+INSERT INTO enrollments 
+VALUES (2, 2, '2026-10', '수료', 70000);
+
+INSERT INTO enrollments 
+VALUES (2, 2, '2026-10', '수료', 60000);
+
+
+
+
+-- 강사 테이블 만들기 
+DROP TABLE IF EXISTS tutor CASCADE;
+
+CREATE TABLE instructors
+(
+    instructor_id   SERIAL      PRIMARY KEY,
+    name      VARCHAR(20) NOT NULL, 
+    sports_id       INT         NOT NULL REFERENCES sports(sports_id),
+    phone     VARCHAR(20),
+    hire_data       DATE        NOT NULL
+);
+
+
+INSERT INTO tutor (tutor_name, sports_id, tutor_phone, hire_data)
+VALUES
+('홍길동', 1, '010-1234-5678', '2025-01-03'),
+('손흥민', 2, '010-1111-2222', '2024-07-13');
+
+
+-- 테이블 수정 ALTER TABLE 
+
+ALTER TABLE courses
+ADD COLUMN instructor_id INT REFERENCES tutor(instructor_id); 
+
+
+
+SELECT course_name AS 강좌명,
+fee AS 수강료,
+fee * 3 AS "3개월수강료"
+FROM courses
+LIMIT 5;
+
+
+
+SELECT region FROM members;
+-- 중복 없이 
+SELECT DISTINCT region FROM members;
+
+SELECT DISTINCT sport_id, level FROM courses;
+
+
+SELECT * FROM members WHERE member_id <= 7;
+
+-- 지역이 마포구인 사람만
+SELECT * FROM members WHERE region = '마포구';
+
+-- 이메일 주소가 없는 사람들
+SELECT * FROM members WHERE email IS NULL;
+
+-- 이메일 주소가 없는 사람들 카운트
+SELECT COUNT(*) FROM members WHERE email IS NULL;
+SELECT COUNT(*) AS "E-MAIL 미기재" FROM members WHERE email IS NULL;
+
+
+SELECT * FROM members WHERE birth_year BETWEEN 1995 AND 2000;
+
+SELECT * FROM courses WHERE course_id IN (1, 5, 10);
+
+
+SELECT * FROM members WHERE name LIKE '김%';
