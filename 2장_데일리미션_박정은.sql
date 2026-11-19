@@ -51,3 +51,4 @@ ORDER BY s.sport_name DESC, enroll_month;
 
 
 
+SELECT member_id, name FROM members;
