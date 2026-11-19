@@ -47,3 +47,7 @@ WHERE e.status <> '취소'
 GROUP BY s.sport_name, enroll_month
 Having SUM(e.pay_amount) >= 1000000
 ORDER BY s.sport_name DESC, enroll_month;
+
+
+
+
